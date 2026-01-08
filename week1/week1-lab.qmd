@@ -1,0 +1,62 @@
+---
+title: "week1-lab"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+```{r}
+
+stressor <- read.csv(here("data/stressor.csv"))
+```
+
+```{r}
+str(stressor)
+```
+
+
+
+
+```{r}
+clean <- function(df) {
+  df %>%
+    mutate(state = str_remove_all(state, "[^A-Za-z ]"),
+           stressor = str_remove_all(stressor, "[^A-Za-z ]"),
+           year = as.numeric(year)) %>% 
+             clean_names()
+}
+```
+
+```{r}
+stressor_clean <- clean(stressor)
+```
+
+```{r}
+str(stressor_clean)
+```
+
+
+
+```{r}
+  stressor_long <- stressor_clean %>% pivot_longer(
+    cols = c("january_march", "april_june", "july_september", "october_december"),
+    names_to = "months",
+    values_to = "stress_pct"
+  ) %>% 
+  mutate(quarter = case_when(months == "january_march" ~ 1,
+    months == "april_june" ~ 2, 
+    months == "july_september" ~ 3, 
+    months == "october_december" ~ 4
+  ))
+  
+```
+
+```{r}
+
+```
+
+
